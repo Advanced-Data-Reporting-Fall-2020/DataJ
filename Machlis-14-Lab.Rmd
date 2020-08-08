@@ -1,0 +1,144 @@
+---
+title: "Pivot Lab"
+author: "I 'State Your Name'" #Put your name here, but don't change the other lines in this 'YAML' section of the document
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: github_document
+---
+
+You can read more about [R Markdown](http://rmarkdown.rstudio.com) Notebooks. 
+
+Run this chunk to install and/or load rmarkdown (Remember, you can  run this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter* or by pressing the green arrow in the upper right of the chunk.)
+
+```{r}
+#install.packages("rmarkdown")
+library("rmarkdown")
+library("pacman")
+
+pacman::p_load(tidyr, dplyr, janitor, readxl)
+```
+
+
+*After each question, run the chunk to check your code.*
+
+* Don't worry about extracting the data from the PDF. You learned that in Lesson 3. We will begin with the spreadsheet file.
+
+# 1. Use the FraminghamGeneralElectiionResults2017.xlsx spreadsheet file in the data directory to create a new data frame called `myspreadsheet`. 
+... Then create a variable called `mycells` that stores the value range of the cells you want to subset from the XLSX file `myspreadsheet` data frame. 
+... Then use readxl to create a data frame called `council` that stores just the values of cells A4 to S16 from the XLSX file.
+... Then remove the first columns from the council dataframe.
+```{r}
+myspreadsheet <- 
+mycells <- 
+council <- 
+council <- council[    ]
+```
+
+#2. Change the names of the first 18 columns of the `council` data frame so that that the word "Candidate" is pre-pended to all of them.
+```{r}
+
+```
+
+#3. When we get to the part in Section 14.7 that begins "To create a 'narrow' tidy data frame with tidyr ..." read this text instead... 
+
+
+To create a “narrow”“ tidy data frame with tidyr, use the `pivot_wider()` function. I think of it as gathering up all the column information that’s spread out over multiple column names but shouldn’t be, and putting them into a single new column. And in fact, that’s what we want to do here: gather all the precinct information that’s currently scattered across 18 different columns into a single column named “Precinct.”
+
+```{r}
+council_long<- council %>% pivot_longer(-Candidate, names_to = "Precinct", values_to = "Votes")
+```
+
+You can read more about pivot_wider() and its counterpart pivot_longer() at
+* https://www.storybench.org/pivoting-data-from-columns-to-rows-and-back-in-the-tidyverse/
+* https://tidyr.tidyverse.org/articles/pivot.html
+
+You will still see tutorials that refrence spread() and gather() and even melt(), but those are all being replaced by uses of pivot_wider and pivot_longer, which professional journalists in the #r channel of newsnerdery.slack.com say is much easier.
+
+# 4. Write code that finds the top finisher in each precinct and stores it in a data frame called `council_winners`.
+
+* Replace the first in Section 14.8 with this: *
+The "long" data frame is easier to work with in order to get what we want: showing how each candidate finished in each precinct, and listing the top two candidates per precinct.
+
+```{r}
+council_winners <- council_long %>%
+  filter(Candidate != "Blanks", Candidate != "Write-Ins") %>% #Frankly, I wouldn't remove these, because it would be news if "Blanks" or "Write-Ins" won the race. We would not want to miss that story.
+  group_by(    ) %>%
+  
+  
+  
+  
+```
+
+# 5. Use the code from #4 to add a column that displays the name of the second-place candidate. (For this one, actually try to get the error message described in the book.)
+```{r}
+
+
+
+
+
+
+
+
+```
+
+# 6. Read http://www.datasciencemadesimple.com/paste-function-in-r/ and describe what the `paste()` function is doing in this code:
+```{r}
+myresults <- c("Canddiate1", "Candidate 2")
+paste(myresults, sep = ",")
+
+#Write your answer here... 
+
+
+
+
+
+```
+
+
+# 7. Write code that uses your code from #5 and ensures that in the case of a tie for the top finisher or second-place finisher that the names of all candidates with the same number of votes will be listed. Save the result to a data frame called `council_winners`.
+```{r}
+
+```
+
+
+* In Section 14.9 we are going to use `pivot_wider() `rather than `spread()` * 
+
+So ... 
+  tidyr’s pivot_wider() function moves variables from a single column into multiple columns, with each value – in this case candidate – having its own column.
+
+The syntax is pivot_wider(mydf, names_from = "", values_from = ""). So, in this case, we’d want
+```{r}
+council_table <- council_long %>% pivot_wider(names_from = "Candidate", values_from = "Votes") 
+
+#What we've done here is switched the rows and columns. Before you had candidates as the rows, but now you have precincts as the rows.
+```
+
+
+# 8. Use the `adorn_totals()` function from the `janitor` package to create both column and row totals for the `council_table` data frame. Save these new totals in a new data frame called `council_table_with_totals`
+```{r}
+
+#WARNING: I really don't like the idea of doing this unless you are about to publish some data. Creating these column and row totals violates one of the principles of tidy data -- all rows are supposed to be one thing and all the same type of thing, but these sums create a row of aggregate values while all the other rows are precincts.
+```
+
+
+(Don't worry for now about the reference to the DT package. It's a cool tool for creating interactive data tables that you can publish on a web page. But we'll get to that later.)
+
+# 9. Create a final data fram called `by_precinct` in which each row lists the Precinct, the name of the top finisher and the name of the second place finisher (be sure that there is just one row per precinct.)
+
+```{r}
+
+```
+
+
+
+
+On YOUR OWN
+#https://s3.amazonaws.com/dl.ncsbe.gov/ENRS/1992_11_03/results_Governor_19921103.pdf
+
+#Run, Knit and Submit
+When you've finished, use the "Preview" pulldown menu at the top of this pane to select "Knit to HTML". This will save an HTML file to this project's directory. 
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+After you've created the HTML file of your answers, you can Stage, Commit and then push your .Rmd and .html files back to GitHub where I will grade them.

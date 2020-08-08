@@ -1,0 +1,39 @@
+---
+title: "Sarah Cohen's pivot_ tutorial"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+For this assignment we will use data created by Arizona State University professor and Pulitzer Prize winning data editor Sarah Cohen. You can follow along with the text from https://cronkitedata.github.io/rstudyguide/033-groupby.html
+
+```{r}
+
+download.file("https://github.com/cronkitedata/rstudyguide/blob/master/data/az-immunizations-grade6.Rda?raw=true","az-immunizations-grade6.Rda")
+load("az-immunizations-grade6.Rda")
+```
+
+1. Refresher: Use the grade6_counts data frame to create two new columns. The first new column is called "schools" and counts the number of schools in each group. The second new column is called "student" and sums up the number of students. (Use `na.rm=TRUE` if you get errors related to `NA` values.)
+```{r}
+grade6_counts %>%
+  
+  
+  
+  
+```
+
+2. Complete the following code so that you have a new data frame called `grade6_counts_wide` where the column names are populated with the values of the `school_type` column in the `grade6_counts` data frame and the values in those columns come from the values in the associated rows of the `pct_types` column in `grade6_counts`.
+```{r}
+grade6_counts %>%
+  group_by (school_type, school_nurse) %>%                           
+  summarise ( schools = n() ) %>%
+  mutate ( types = sum(schools),                                     
+           pct_types = schools/types*100) %>%                        
+  select (school_type, school_nurse, pct_types) %>%
+#use pivot_wider on the next line to complete the task.  
+  
+  
+```
+
